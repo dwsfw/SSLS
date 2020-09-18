@@ -1,0 +1,17 @@
+﻿@model SSLS.Domain.Concrete.Bookshelf
+<style>
+    .navbar-text{
+        margin-top:10px
+    }
+</style>
+<div>
+    <div class="navbar-text">
+        <b>书架：</b>
+        <span class="sum">@Model.Lines.Sum(x => x.Quantity)</span>本
+    </div>
+    <div class="navbar-right">
+        @Html.ActionLink("借阅", "Index", "Bookshelf",
+            new { returnUrl = Request.Url.PathAndQuery },
+            new { @class = "btn btn-success nacbar-btn" })
+    </div>
+</div>

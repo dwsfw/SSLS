@@ -1,0 +1,65 @@
+﻿
+@model SSLS.Domain.Concrete.Book
+<style>
+    .well{
+        width:40%;
+        float:left;
+        margin-left:7%;
+    }
+    .move{
+        margin-left:30%;
+        margin-top:80px;
+    }
+    img{
+        margin-bottom:20px
+    }
+    h5{
+        margin-top:30px
+    }
+    .label-primary{
+        margin-top:40px
+    }
+    .lose{
+        pointer-events: none;
+        background:#cbcbcb;
+        color:black
+    } 
+    .user-name{
+        margin-top:-5px
+    }
+</style>
+<div class="well"><span class="pull-right label label-primary">￥@Model.Price</span>
+    <div style="float:left">
+        <h3 style="width:250px;height:30px">@Model.Name</h3>
+        <img src="~/Images/@Model.ImageUrl" alt="@Model.Id 产品图片" width="100" />
+    </div>
+    
+    <div class="move">
+        <h5 style ="width:300px">作者：@Model.Authors</h5>
+        <h5>状态：<span class="statu">@Model.Status</span></h5>
+    </div>
+    <div style="clear:both"></div>
+    @using (Html.BeginForm("AddToBookshelf", "Bookshelf"))
+    {
+        <div class="pull-right">
+            @Html.HiddenFor(x => x.Id)
+            @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+            @if (Model.Status == "在库")
+            {
+                <input type="submit" class="btn btn-success" value="加入书架" />
+            }
+            else
+            {
+                <input type="submit" class="btn btn-success lose" value="已外借" />
+            }
+        </div>
+    }
+    @using (Html.BeginForm("Details","Book"))
+    {
+        <div class="pull-left">
+            @Html.HiddenFor(x => x.Id)
+            @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+            <input type="submit" class="btn btn-success" value="书籍详情" />
+        </div>
+    }
+</div>

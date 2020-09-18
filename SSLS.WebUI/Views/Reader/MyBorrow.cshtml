@@ -1,0 +1,84 @@
+﻿@model IEnumerable<SSLS.Domain.Concrete.Borrow>
+@{
+    ViewBag.Title = "MyBorrow";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    table tr th,td{
+        text-align:center;
+    }
+    table{
+        width:100%;
+    }
+    .lose{
+        pointer-events:none;
+        background:#cbcbcb;
+        color:black
+    }
+</style>
+<table>
+    <thead>
+        <tr>
+            <th>名称</th>
+            <th>图片</th>
+            <th>书籍详情</th>
+            <th style="width:100px">借阅时间</th>
+            <th style="width:100px">应该归还时间</th>
+            <th style="width:80px">当前状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Book.Name</td>
+                <td><img src="~/Images/@p.Book.ImageUrl" alt="@p.Book.Id 产品图片" width="100" /></td>
+                <td>
+                     @using (Html.BeginForm("Details", "Book"))
+                    {
+                        <div class="pull-left">
+                            @Html.Hidden("id", p.Book.Id)
+                            @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                            <input type="submit" class="btn btn-success" value="书籍详情" />
+                        </div>
+                    }
+                </td>
+                <td>@p.BorrowTime.ToShortDateString()</td>
+                <td>@p.NeedReturnTime.ToShortDateString()</td>
+                <td class="statu">@p.BorrowStatu</td>
+                <td>
+                    @using (Html.BeginForm("RenewBook", "Reader",FormMethod.Get))
+                    {
+                        <div class="pull-right">
+                            @Html.Hidden("renew", p.Renew, new {@class="Checkrenew" })
+                            @Html.Hidden("borrowid", p.Id)
+                            @if (p.BorrowStatu == "已归还"||p.Renew==1)
+                            {
+                                <input type="submit" class="btn btn-success lose" value="续借" />
+                            }
+                            else
+                            {
+                                <input type="submit" class="btn btn-success" value="续借" />
+                            }
+                        </div>
+                    }
+                    @using (Html.BeginForm("ReturnBook", "Reader", FormMethod.Get))
+                    {
+                        <div class="pull-right">
+                            @Html.Hidden("borrowid", p.Id)
+                            @if (p.BorrowStatu == "已归还")
+                            {
+                                <input type="submit" class="btn btn-success lose" value="归还" />
+                            }
+                            else
+                            {
+                                <input type="submit" class="btn btn-success" value="归还" />
+                            }
+                        </div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/root.css" rel="stylesheet">
+    <script type="text/javascript" src="~/js/jquery.min.js"></script>
+    <script src="~/js/bootstrap/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="~/js/plugins.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap-select/bootstrap-select.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap-toggle/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap-wysihtml5/wysihtml5-0.3.0.min.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+    <script type="text/javascript" src="~/js/summernote/summernote.min.js"></script>
+    <script type="text/javascript" src="~/js/flot-chart/flot-chart.js"></script>
+    <script type="text/javascript" src="~/js/flot-chart/flot-chart-time.js"></script>
+    <script type="text/javascript" src="~/js/flot-chart/flot-chart-stack.js"></script>
+    <script type="text/javascript" src="~/js/flot-chart/flot-chart-pie.js"></script>
+    <script type="text/javascript" src="~/js/easypiechart/easypiechart.js"></script>
+    <script type="text/javascript" src="~/js/easypiechart/easypiechart-plugin.js"></script>
+    <script type="text/javascript" src="~/js/sparkline/sparkline.js"></script>
+    <script type="text/javascript" src="~/js/sparkline/sparkline-plugin.js"></script>
+    <script src="~/js/rickshaw/d3.v3.js"></script>
+    <script src="~/js/datatables/datatables.min.js"></script>
+    <script src="~/js/sweet-alert/sweet-alert.min.js"></script>
+    <script src="~/js/Modern-alert/main.js"></script>
+    <script type="text/javascript" src="~/js/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/js/moment/moment.min.js"></script>
+    <script type="text/javascript" src="~/js/full-calendar/fullcalendar.js"></script>
+    <script type="text/javascript" src="~/js/date-range-picker/daterangepicker.js"></script>
+    <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="~/Content/auth.css">
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+    <script src="~/Scripts/toastr.js"></script>
+    <style>
+        .hid{
+            display:none;
+        }
+        .shide,.whide,.ehide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    
+    <span class="shide">@TempData["success"]</span>
+    <span class="ehide">@TempData["error"]</span>
+        <div class="loading"><img src="~/img/loading.gif" alt="loading-img"></div>
+
+        <div id="top" class="clearfix">
+
+            <div class="applogo">
+                <a href="~/Book/List" class="logo"><img src="~/Images/Logo.png" />心诚图书馆</a>
+            </div>
+
+            <a href="#" class="sidebar-open-button"><i class="fa fa-bars"></i></a>
+            <a href="#" class="sidebar-open-button-mobile"><i class="fa fa-bars"></i></a>
+            <div class="title hid">@Html.Action("Summary", "Bookshelf")</div>
+
+            <ul class="top-right hid">
+                @using (Html.BeginForm("List", "Book", FormMethod.Get))
+                {
+                    <span>查询：</span>@Html.TextBox("key", "", new { @class = "searchbox" });
+                    <input type="submit" class="btn btn-success" value="查询"/>
+                }
+            </ul>
+        </div>
+        <div class="sidebar clearfix">
+            <div class="dropdown link">
+                <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox">
+                    @Html.Action("Summary", "Reader")
+                </a>
+            </div>
+            <ul class="sidebar-panel nav hid">
+                @Html.Action("Menu", "Nav")
+            </ul>
+        </div>
+    <div class="content">
+        <div class="row panel">
+        
+                @RenderBody()
+          
+        </div>
+    </div>
+    <script>
+    $(function () {
+        if ($(".shide").text() != "")
+            toastr.success('温馨提示', $(".shide").text())
+        else if ($(".ehide").text() != "") {
+            toastr.error('温馨提示', $(".ehide").text())
+        }
+    })
+    </script>
+    <script>
+
+    var seriesData = [[], [], []];
+    var random = new Rickshaw.Fixtures.RandomData(20);
+
+    for (var i = 0; i < 50; i++) {
+        random.addData(seriesData);
+    }
+
+    var graph = new Rickshaw.Graph({
+        element: document.getElementById("rickshaw-bars"),
+        renderer: 'bar',
+        series: [
+          {
+              color: "#303f9f",
+              data: seriesData[0],
+              name: 'Job'
+          }, {
+              color: "#ef4836",
+              data: seriesData[1],
+              name: 'Feed'
+          }
+        ]
+    });
+
+    graph.render();
+
+    var hoverDetail = new Rickshaw.Graph.HoverDetail({
+        graph: graph,
+        formatter: function (series, x, y) {
+            var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
+            var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
+            var content = swatch + series.name + ": " + parseInt(y) + '<br>' + date;
+            return content;
+        }
+    });
+    </script>
+    <script>
+        var options = {
+            scaleColor: false,
+            trackColor: 'rgba(255, 255, 255, 0.5)',
+            barColor: '#fff',
+            lineWidth: 8,
+            lineCap: 'butt',
+        };
+    </script>
+</body>
+</html>

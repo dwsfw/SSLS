@@ -1,0 +1,9 @@
+﻿@model SSLS.Domain.Concrete.Book
+
+<div class="well">
+    <h3>@Model.Name</h3><span class="pull-right label label-primary">￥@Model.Price</span>
+    <h5 class="text-left">作者：@Model.Authors</h5>
+    <img src="~/Images/@Model.ImageUrl" alt="@Model.Id 产品图片" width="100" />
+    <p>@Model.Description</p>
+
+</div>

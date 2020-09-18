@@ -1,0 +1,75 @@
+﻿@model SSLS.Domain.Concrete.Reader
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+         function Change(node) {
+                 node.src = "/Reader/CheckCode?id=" + new Date();
+         }
+         $(function () {
+             for (var i = 0; i < $(".whide").length; i++)
+             {
+                 if ($(".whide").eq(i).text().trim() != "")
+                     toastr.warning('温馨提示', $(".whide").eq(i).text())
+             }
+
+         })
+</script>
+<div class="panel">
+    <div class="lowin lowin-blue">
+        <div class="lowin-brand">
+            <img src="~/img/kodinger.jpg" alt="logo">
+        </div>
+        <div class="lowin-wrapper">
+            <div class="lowin-box lowin-register">
+                <div class="lowin-box-inner">
+                    @using (Html.BeginForm())
+                    {
+                        <span class="whide">@Html.ValidationMessageFor(e => e.Email)</span>
+                        <span class="whide">@Html.ValidationMessageFor(e => e.Password)</span>   
+                         <span class="whide">@Html.ValidationMessageFor(e => e.Name)</span>
+                        <span class="whide">@Html.ValidationMessageFor(e => e.Phone)</span>
+                        <p>Let's create your account</p>
+                        <div class="lowin-group">
+                            <label>Name</label>
+                            @Html.TextBoxFor(c => c.Name, new { @class = "lowin-input", @autocomplete = "off" })
+                        </div>
+                        <div class="lowin-group">
+                            <label>Email</label>
+                            @Html.TextBoxFor(c => c.Email, new { @class = "lowin-input" })
+                        </div>
+                        <div class="lowin-group">
+                            <label>Password</label>
+                            @Html.PasswordFor(c => c.Password, new { @class = "lowin-input" })
+                        </div>
+                        <div class="lowin-group">
+                            <label>Phone</label>
+                            @Html.TextBoxFor(c => c.Phone, new { @class = "lowin-input" })
+                        </div>
+                        <input type="submit" value="注册" class="lowin-btn login-btny" style="padding:0px" />
+
+                        <div class="text-foot">
+                            Already have an account? <a href="/Reader/Login" class="login-link">Login</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <footer class="lowin-footer">
+            <a href="http://fb.me/itskodinger"></a>
+        </footer>
+    </div>
+    <script src="~/Scripts/auth.js"></script>
+    <script>
+        Auth.init({
+            login_url: '#login',
+            forgot_url: '#forgot'
+        });
+    </script>
+</div>
+
+
+

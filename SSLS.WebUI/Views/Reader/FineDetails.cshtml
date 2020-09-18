@@ -1,0 +1,27 @@
+﻿@model SSLS.Domain.Concrete.Fine
+
+@{
+    ViewBag.Title = "FineDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>罚款详情</h2>
+<div>
+    <div class="well">
+        <h3>@Model.Borrow.Book.Name</h3>
+        <span class="pull-right label label-primary">￥@Model.Borrow.Book.Price</span>
+        <h5>作者：@Model.Borrow.Book.Authors</h5>
+        <img src="~/Images/@Model.Borrow.Book.ImageUrl" alt="@Model.Borrow.Book.Id 产品图片" width="100" />
+        <div class="pull-right" style="margin-right:10px;margin-top:100px">
+            @Html.ActionLink("我的罚款", "MyFine", null, new { @class = "btn btn-success bb" })
+        </div>
+        <div>
+            <p>借阅时间：<span>@Model.Borrow.BorrowTime</span></p>
+            <p>应该归还时间：<span>@Model.Borrow.NeedReturnTime</span></p>
+            <p>归还时间：<span >@Model.Borrow.ReturnTime</span></p>
+            <p>应缴罚款金额：￥<span>@Model.FineMoney</span></p>
+
+        </div>
+    </div>
+</div>
+

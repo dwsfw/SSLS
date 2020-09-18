@@ -1,0 +1,252 @@
+﻿@model SSLS.WebUI.Models.ReaderListViewModel
+@{
+    ViewBag.Title = "ReaderIndex";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/css/demo.css">
+<link href="~/Content/css/style.css" rel="stylesheet" type="text/css" media="all" />
+<link rel="stylesheet" type="text/css" href="~/css/iziModal.css">
+<style>
+    table tr th, td {
+        text-align: center;
+        width: 70px;
+    }
+    .pagination {
+        display: inline-block;
+        padding-left: 0;
+        margin: 20px 0;
+        border-radius: 4px;
+    }
+
+        .pagination > li {
+            display: inline;
+        }
+
+            .pagination > li > a,
+            .pagination > li > span {
+                position: relative;
+                float: left;
+                padding: 6px 12px;
+                margin-left: -1px;
+                line-height: 1.428571429;
+                text-decoration: none;
+                background-color: #ffffff;
+                border: 1px solid #dddddd;
+            }
+
+            .pagination > li:first-child > a,
+            .pagination > li:first-child > span {
+                margin-left: 0;
+                border-bottom-left-radius: 4px;
+                border-top-left-radius: 4px;
+            }
+
+            .pagination > li:last-child > a,
+            .pagination > li:last-child > span {
+                border-top-right-radius: 4px;
+                border-bottom-right-radius: 4px;
+            }
+
+            .pagination > li > a:hover,
+            .pagination > li > span:hover,
+            .pagination > li > a:focus,
+            .pagination > li > span:focus {
+                background-color: #eeeeee;
+            }
+
+        .pagination > .active > a,
+        .pagination > .active > span,
+        .pagination > .active > a:hover,
+        .pagination > .active > span:hover,
+        .pagination > .active > a:focus,
+        .pagination > .active > span:focus {
+            z-index: 2;
+            color: #ffffff;
+            cursor: default;
+            background-color: #428bca;
+            border-color: #428bca;
+        }
+
+        .pagination > .disabled > span,
+        .pagination > .disabled > a,
+        .pagination > .disabled > a:hover,
+        .pagination > .disabled > a:focus {
+            color: #999999;
+            cursor: not-allowed;
+            background-color: #ffffff;
+            border-color: #dddddd;
+        }
+</style>
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th> User </th>
+                        <th> Name </th>
+                        <th> Sex </th>
+                        <th> Email </th>
+                        <th> Phone </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.readers)
+                    {
+                        <tr>
+                            <td class="py-1">
+                                <img src="../../../assets/images/faces-clipart/pic-1.png" alt="image" />
+                            </td>
+                            <td><a href="#" class="trigger-large" style="color:black">@item.Name</a></td>
+                            <td>@item.Sex </td>
+                            <td>@item.Email </td>
+                            <td>@item.Phone</td>
+                           <td><div id="modal-large" class="iziModal" style="z-index:10000">
+                                   <div class=" person-info-agileits-w3layouts">
+                                       <ul>
+                                           <li><span>Name: </span>@item.Name</li>
+                                           <li style="clear:both"><span>Sex: </span>@item.Sex</li>
+                                           <li style="clear:both"><span>Email: </span>@item.Email</li>
+                                           <li style="clear:both"><span>Phone: </span>@item.Phone</li>
+                                           <li style="clear:both"><span>Class: </span>@item.Classes</li>
+                                           <li style="clear:both"><span>Balance: </span>￥@item.Balance</li>
+                                       </ul>
+                                   </div>
+                                   <div style="clear:both"></div>
+                                   <div class="person-info-agileits-w3layouts">
+                                       <ul>
+                                           <li>
+                                               <a href="#" class="botton-w3ls">读者借阅</a>
+                                           </li>
+                                       </ul>
+                                   </div>
+                                   <table class="table">
+                                       <thead>
+                                           <tr>
+                                               <th>名称</th>
+                                               <th>图片</th>
+                                               <th>书籍详情</th>
+                                               <th>借阅时间</th>
+                                               <th>应该归还时间</th>
+                                               <th>当前状态</th>
+                                           </tr>
+                                       </thead>
+                                       <tbody>
+                                           @foreach (var p in item.Borrow)
+                                           {
+                                                <tr class="borrow">
+                                                    <td>@p.Book.Name</td>
+                                                    <td><img src="~/Images/@p.Book.ImageUrl" alt="@p.Book.Id 产品图片" width="100" /></td>
+                                                    <td>
+                                                        @using (Html.BeginForm("Details", "Book"))
+                                                        {
+                                                            <div class="">
+                                                                @Html.Hidden("id", p.Book.Id)
+                                                                <input type="submit" class="btn btn-success" value="书籍详情" />
+                                                            </div>
+                                                        }
+                                                    </td>
+                                                    <td>@p.BorrowTime.ToShortDateString()</td>
+                                                    <td>@p.NeedReturnTime.ToShortDateString()</td>
+                                                    <td class="statu">@p.BorrowStatu</td>
+                                                </tr>
+                                           }
+                                       </tbody>
+                                   </table><a href="#" class="showmore">显示所有借阅>>></a>
+                                   <div class="person-info-agileits-w3layouts">
+                                       <ul>
+                                           <li>
+                                               <a href="#" class="botton-w3ls">最近罚款</a>
+                                           </li>
+                                       </ul>
+                                   </div>
+                                   <table class="table">
+                                       <tr>
+                                           <th>书籍名</th>
+                                           <th style="width:100px">罚款时间</th>
+                                           <th>罚款原因</th>
+                                           <th>罚款金额</th>
+                                           <th style="width:100px">罚款缴纳时间</th>
+                                           <th>操作</th>
+                                       </tr>
+                                       @foreach (var p in item.Fine)
+                                       {
+                                           <tr class="fine">
+                                               <td>@Html.DisplayFor(modelItem => p.Borrow.Book.Name)</td>
+                                               <td>@p.FineTime.ToShortDateString()</td>
+                                               <td>@Html.DisplayFor(modelItem => p.why)</td>
+                                               <td>@Html.DisplayFor(modelItem => p.FineMoney)</td>
+                                               <td class="PayFineTime">
+                                                   @if (p.PayFineTime != null)
+                                                   {
+                                                       @DateTime.Parse(Html.DisplayFor(modelItem => p.PayFineTime).ToString()).ToShortDateString()
+                                                   }
+                                           </td>
+                                           <td>
+                                               @Html.ActionLink("罚款详情", "FineDetails", new { id = p.Id }, new { @class = "btn btn-success" })
+                                           </td>
+                                       </tr>
+                                       }
+                                   </table><a href="#" class="showmorefine">显示所有罚款>>></a>
+                                 </div></td>
+                        </tr>
+                    }
+                    
+                </tbody>
+            </table>
+            <ul class="pagination">
+                @Html.PageLinks(Model.pagingInfo, x => Url.Action("ReaderIndex", new { page = x }))
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(".iziModal").iziModal({
+            title: "读者信息",
+            iconClass: 'icon-chat',
+            overlayColor: 'rgba(255, 255, 255, 0.4)',
+            headerColor: '#334c7b',
+            iconColor: '#00ffba',
+            width: 1000,
+            padding: 20,
+            overlayClose:true
+        });
+        $(".trigger-large").click(function (event) {
+            event.preventDefault();
+            $(this).parents("tr").find(".iziModal").iziModal('open');
+        })
+        var cntBorrow = 0,cnrFine=0;
+        for (var i = 0; i < $(".statu").length; i++) {
+            if ($(".statu").eq(i).text() == "已归还")
+            {
+                $(".statu").eq(i).parents(".borrow").hide();
+                cntBorrow++;
+            }   
+        }
+        for (var i = 0; i < $(".PayFineTime").length; i++) {
+            if ($(".PayFineTime").eq(i).text().trim() == "") {
+                $(".PayFineTime").eq(i).parents(".fine").hide();
+                cntFine++;
+            }
+        }
+        if (cntBorrow == 0) {
+            for (var i = 0; i <3; i++) {
+                    $(".statu").eq(i).parents(".borrow").show();
+            }
+        }
+        $(".showmore").click(function () {
+            for (var i = 0; i < $(".statu").length; i++) {
+               $(".statu").eq(i).parents(".borrow").show();
+            }
+            $(this).hide();
+        })
+        $(".showmorefine").click(function () {
+            for (var i = 0; i < $(".PayFineTime").length; i++) {
+                $(".PayFineTime").eq(i).parents(".fine").show();
+            }
+            $(this).hide();
+        })
+    })
+</script>

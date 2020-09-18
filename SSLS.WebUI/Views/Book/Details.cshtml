@@ -1,0 +1,62 @@
+﻿@model SSLS.WebUI.Models.BookDetail
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/style.css" rel="stylesheet" />
+<style>
+    .lose {
+        pointer-events: none;
+        background: #cbcbcb;
+        color: black;
+    }
+    .toright{
+        margin-right:40%
+    }
+    ul li{
+        float:left;
+        clear:left
+    }
+</style>
+<script>
+    $(function () {
+        $(".hid").show();
+    })
+</script>
+<div id="templatemo_content_right">
+
+    <h1 style="float:left">@Model.book.Name</h1>
+    <div style="clear:both"></div>
+    <h2 style="float:left">@Model.book.Authors</h2>
+    <div style="clear:both"></div>
+    <div class="image_panel" style="float:left"><img src="~/Images/@Model.book.ImageUrl" alt="CSS Template" width="100" height="100" /></div>
+
+    <ul style="float:left">
+        <li>出版社：&nbsp;&nbsp;&nbsp;&nbsp;@Model.book.Press</li>
+        <li>出版时间：@Model.book.PublishDate</li>
+        <li>图书价值：￥@Model.book.Price</li>
+        <li>图书状态：@Model.book.Status</li>
+        <li>类别：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @Model.book.Category.Name</li>
+    </ul>
+    <div style="clear:both"></div>
+    <p style="float:left" >@Model.book.Description</p>
+    <div style="clear:both">&nbsp;</div>
+    @using (Html.BeginForm("AddToBookshelf", "Bookshelf"))
+    {
+        <div class="pull-right toright">
+            @Html.Hidden("Id",Model.book.Id)
+            @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+            @if (Model.book.Status == "在库")
+            {
+                <input type="submit" class="btn btn-success" value="加入书架" />
+            }
+            else
+            {
+                <input type="submit" class="btn btn-success lose" value="加入书架" />
+            }
+        </div>
+    }
+    <a class="btn btn-primary pull-right" style="margin-right:20px" href="@Model.returnUrl">返回</a>
+
+</div>

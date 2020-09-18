@@ -1,0 +1,30 @@
+﻿@model SSLS.Domain.Concrete.Admin
+<style>
+    .user-name a:hover {
+        color: white;
+    }
+
+    .user-name a {
+        color: white;
+        font-size: 20px;
+        margin-right: 5px;
+    }
+</style>
+<div class="user-name" style="float:right">
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+            <a class="navbar-brand count-indicator" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                @Model.UserName
+            </a>
+        </li>
+        <br />
+        <br />
+        <li class="nav-item">
+            @using (Html.BeginForm("LoginOut", "Admin"))
+            {
+                <input type="submit" class="btn btn-primary" id="notificationDropdown" data-toggle="dropdown" value="注销"/>
+            }
+
+        </li>
+    </ul>
+</div>

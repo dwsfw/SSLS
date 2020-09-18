@@ -1,0 +1,40 @@
+﻿@model SSLS.WebUI.Models.BookBorrowModel
+@{
+    ViewBag.Title = "ReturnBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #show{
+        color:red
+    }
+</style>  
+<h2>图书归还</h2>
+<div>
+    <div class="well">
+        <h3>@Model.book.Name</h3><span class="pull-right label label-primary">￥@Model.book.Price</span>
+        <h5>作者：@Model.book.Authors</h5>
+        <img src="~/Images/@Model.book.ImageUrl" alt="@Model.book.Id 产品图片" width="100" />
+        @using (Html.BeginForm())
+        {      
+          <div class="pull-right">
+            @Html.Hidden("borrowid", Model.borrow.Id)
+            <input type="submit" value="确认归还" class="btn btn-success" />
+          </div>   
+         }
+        <div class="pull-right" style="margin-right:10px;margin-top:1px">
+            @Html.ActionLink("算了，我再借几天", "MyBorrow", null, new {@class="btn btn-success" })
+        </div>   
+        <div>
+            <p>借阅时间：<span class="borrowtime">@Model.borrow.BorrowTime</span></p>
+            <p>应该归还时间：<span class="needreturntime">@Model.borrow.NeedReturnTime</span></p>
+        </div>
+   </div>
+    <div class="showthis">
+            @if (Model.borrow.NeedReturnTime < DateTime.Now)
+            {        
+                <span id="show">
+                    该图书已超期，若有疑问，请联系图书管理员！！！
+                </span>
+            }
+    </div>
+</div>

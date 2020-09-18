@@ -1,0 +1,157 @@
+﻿@model SSLS.WebUI.Models.ReaderDetailViewModel
+@{
+    ViewBag.Title = "Center";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/Content/css/lightbox.css" type="text/css" media="all" />
+<link href="~/Content/css/popuo-box.css" rel="stylesheet" type="text/css" media="all" />
+<link href="~/Content/css/style.css" rel="stylesheet" type="text/css" media="all" />
+<style>
+    ul li span{
+        float:left
+    }
+    table tr th,td{
+        text-align:center;
+    }
+    table{
+        width:100%;
+    }
+    .lose{
+        pointer-events:none;
+        background:#cbcbcb;
+        color:black
+    }
+</style>
+<div class=" person-info-agileits-w3layouts">
+    <h3 class="w3_head w3_head1">@Model.reader.Name 的个人中心</h3>
+    <ul>
+        <li><span>Name: </span>@Model.reader.Name</li>
+        <li style ="clear:both"><span>Sex: </span>@Model.reader.Sex</li>
+        <li style="clear:both"><span>Email: </span>@Model.reader.Email</li>
+        <li style="clear:both"><span>Phone: </span>@Model.reader.Phone</li>
+        <li style="clear:both"><span>Class: </span>@Model.reader.Classes</li>
+        <li style="clear:both"><span>Balance: </span>￥@Model.reader.Balance</li>
+        <li>
+            <a href="/Reader/EditReader" class="botton-w3ls">修改信息</a>
+            <a href="/Reader/Recharge" class="botton-w3ls">充值</a>
+            <a href="/Reader/ChangePwd" class="play-icon popup-with-zoom-anim botton-w3ls">修改密码</a>
+        </li>
+    </ul>
+</div>
+<div style="clear:both"></div>
+<div class="person-info-agileits-w3layouts">
+    <ul>
+        <li>
+            <a href="/Reader/MyBorrow" class="botton-w3ls">最近借阅</a>
+        </li>
+    </ul>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>名称</th>
+            <th>图片</th>
+            <th>书籍详情</th>
+            <th style="width:100px">借阅时间</th>
+            <th style="width:100px">应该归还时间</th>
+            <th style="width:80px">当前状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model.borrows)
+        {
+            <tr>
+                <td>@p.Book.Name</td>
+                <td><img src="~/Images/@p.Book.ImageUrl" alt="@p.Book.Id 产品图片" width="100" /></td>
+                <td>
+                    @using (Html.BeginForm("Details", "Book"))
+                    {
+                        <div class="">
+                            @Html.Hidden("id", p.Book.Id)
+                            <input type="submit" class="btn btn-success" value="书籍详情" />
+                        </div>
+                    }
+                </td>
+                <td>@p.BorrowTime.ToShortDateString()</td>
+                <td>@p.NeedReturnTime.ToShortDateString()</td>
+                <td class="statu">@p.BorrowStatu</td>
+                <td>
+                    @using (Html.BeginForm("RenewBook", "Reader", FormMethod.Get))
+                    {
+                        <div class="pull-right">
+                            @Html.Hidden("renew", p.Renew, new { @class = "Checkrenew" })
+                            @Html.Hidden("borrowid", p.Id)
+                            @if (p.BorrowStatu == "已归还" || p.Renew == 1)
+                            {
+                                <input type="submit" class="btn btn-success lose" value="续借" />
+                            }
+                            else
+                            {
+                                <input type="submit" class="btn btn-success" value="续借" />
+                            }
+                        </div>
+                    }
+                    @using (Html.BeginForm("ReturnBook", "Reader", FormMethod.Get))
+                    {
+                        <div class="pull-right">
+                            @Html.Hidden("borrowid", p.Id)
+                            @if (p.BorrowStatu == "已归还")
+                            {
+                                <input type="submit" class="btn btn-success lose" value="归还" />
+                            }
+                            else
+                            {
+                                <input type="submit" class="btn btn-success" value="归还" />
+                            }
+                        </div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="person-info-agileits-w3layouts">
+    <ul>
+        <li>
+            <a href="/Reader/MyFine" class="botton-w3ls">最近罚款</a>
+        </li>
+    </ul>
+</div>
+<table class="table">
+    <tr>
+        <th>书籍名</th>
+        <th style="width:100px">罚款时间</th>
+        <th>罚款原因</th>
+        <th>罚款金额</th>
+        <th style="width:100px">罚款缴纳时间</th>
+        <th>操作</th>
+    </tr>
+    
+    @foreach (var item in Model.fines)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Borrow.Book.Name)</td>
+            <td>@item.FineTime.ToShortDateString()</td>
+            <td>@Html.DisplayFor(modelItem => item.why)</td>
+            <td>@Html.DisplayFor(modelItem => item.FineMoney)</td>
+            <td class="PayFineTime">@if (item.PayFineTime != null)
+            {
+                @DateTime.Parse(Html.DisplayFor(modelItem => item.PayFineTime).ToString()).ToShortDateString()
+
+            }</td>
+
+            <td>
+                @Html.ActionLink("罚款详情", "FineDetails", new { id = item.Id }, new { @class = "btn btn-success" })
+                @if (item.PayFineTime == null)
+                {
+                    @Html.ActionLink("缴纳罚款", "PayFine", new { id = item.Id }, new { @class = "btn btn-success" })
+                }
+                else
+                {
+                    @Html.ActionLink("缴纳罚款", "PayFine", new { id = item.Id }, new { @class = "btn btn-success lose" })
+                }
+            </td>
+        </tr>
+    }
+</table>

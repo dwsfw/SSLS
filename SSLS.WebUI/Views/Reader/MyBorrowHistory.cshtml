@@ -1,0 +1,55 @@
+﻿@model SSLS.WebUI.Models.BorrowHistoryViewModel
+
+@{
+    ViewBag.Title = "MyBorrowHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    table tr th, td {
+        text-align: center;
+    }
+    table{
+        width:100%;
+    }
+</style>
+<h2>借阅历史</h2>
+<table>
+    <thead>
+        <tr>
+            <th width="18%">名称</th>
+            <th>图片</th>
+            <th>书籍详情</th>
+            <th>借阅时间</th>
+            <th>应该归还时间</th>
+            <th>归还时间</th>
+            <th>当前状态</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model.Borrows)
+        {
+            <tr>
+                <td>@p.Book.Name</td>
+                <td><img src="~/Images/@p.Book.ImageUrl" alt="@p.Book.Id 产品图片" width="100" /></td>
+                <td>
+                    @using (Html.BeginForm("Details", "Book"))
+                    {
+                        <div class="pull-left">
+                            @Html.Hidden("id", p.Book.Id)
+                            @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                            <input type="submit" class="btn btn-success" value="书籍详情" />
+                        </div>
+                    }
+                </td>
+                <td>@p.BorrowTime</td>
+                <td>@p.NeedReturnTime</td>
+                <td>@p.ReturnTime</td>
+                <td class="statu">@p.BorrowStatu</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="clear:both"></div>
+<ul class="pagination">
+    @Html.PageLinks(Model.pagingInfo, x => Url.Action("MyBorrowHistory", new { page = x }))
+</ul>

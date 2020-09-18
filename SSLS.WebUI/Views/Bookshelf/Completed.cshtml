@@ -1,0 +1,22 @@
+﻿@model SSLS.WebUI.Models.ResultModel
+
+@{
+    ViewBag.Title = "Completed";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .warn{
+        color:red;
+    }
+</style>
+<p>恭喜你成功借阅以下书籍</p>
+@foreach (var p in Model.books)
+{
+    @Html.Partial("BooksSummary", p)
+}
+<a href="~/Book/List" class="btn btn-success">继续借书</a>
+<div style="clear:both"></div>
+<p>以上书籍借阅时间为</p>
+@Model.nowtime 至 @Model.needtime<br />
+<b class="warn">注意：</b><p class="warn">请保护好书籍，如有遗失，则需要赔偿书本价格两倍。</p>
+<p class="warn">请及时归还书籍，如有逾期，则赔偿书价的10%。</p>

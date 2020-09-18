@@ -1,0 +1,33 @@
+﻿@model SSLS.WebUI.Models.ReaderModel
+<style>
+    .user-name a:hover{
+        color:white
+    }
+    .user-name a{
+        color:white;
+        font-size:20px;
+        margin-right:5px;
+    }
+</style>
+<div class="user-name">
+    @if (Model.reader.Id == 0)
+    {
+        @Html.ActionLink("登录", "Login", "Reader")
+    }
+    else
+    {
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle profilebox">
+            <img src="~/img/profileimg.png" alt="img">
+            <div class="user-name"><b>@Model.reader.Name</b><span class="caret"></span></div>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-list dropdown-menu-right">
+            <li role="presentation" class="dropdown-header">Profile</li>
+            <li><a href="~/Reader/Center"><i class="fa falist fa-envelope"></i>个人信息</a></li>
+            <li><a href="~/Reader/MyFine"><i class="fa falist fa-file-o"></i>我的罚款（@Model.FineCount）</a></li>
+            <li><a href="~/Reader/MyBorrow"><i class="fa falist fa-gear"></i>我的借阅</a></li>
+            <li><a href="~/Reader/MyBorrowHistory"><i class="fa falist fa-gear"></i>我的借阅历史</a></li>
+            <li><a href="#"><i class="fa falist fa-lock"></i> <p>我的余额：￥@Model.reader.Balance</p></a></li>
+            <li><a href="~/Reader/LoginOut"><i class="fa falist fa-power-off"></i>注销</a></li>
+        </ul>
+    }
+</div>

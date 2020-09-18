@@ -1,0 +1,64 @@
+﻿@model SSLS.Domain.Concrete.Borrow
+@{
+    ViewBag.Title = "RenewBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #show {
+        color: red;
+    }
+    .lose{
+        pointer-events:none;
+        background:#cbcbcb;
+        color:black
+    }
+</style>
+<h2>图书续借</h2>
+<div>
+    <div class="well">
+        <h3>@Model.Book.Name</h3><span class="pull-right label label-primary">￥@Model.Book.Price</span>
+        <h5>作者：@Model.Book.Authors</h5>
+        <img src="~/Images/@Model.Book.ImageUrl" alt="@Model.Book.Id 产品图片" width="100" />
+        @Html.Hidden("renew", Model.Renew, new { @class="renew"})
+        @using (Html.BeginForm("Renew","Reader"))
+        {
+            <div class="pull-right">
+                @Html.Hidden("borrowid", Model.Id)
+                @if (Model.CanRenew != 0)
+                {
+                    <input type="submit" value="无法续借" class="btn btn-success lose" />
+                }
+                else
+                {
+                    <input type="submit" value="确认续借" class="btn btn-success" />
+                }
+            </div>
+        }
+        @if (Model.CanRenew != 0)
+        {
+            <div class="pull-right" style="margin-right:10px;margin-top:1px">
+                @Html.ActionLink("我的借阅", "MyBorrow", null, new { @class = "btn btn-success bb" })
+            </div>
+        }
+        else
+        {
+            <div class="pull-right" style="margin-right:10px;margin-top:1px">
+                @Html.ActionLink("算了，我这几天够了", "MyBorrow", null, new { @class = "btn btn-success bb" })
+            </div>
+        }
+        <div>
+            <p>借阅时间：<span class="borrowtime">@Model.BorrowTime</span></p>
+            <p>应该归还时间：<span class="needreturntime">@Model.NeedReturnTime</span></p>
+        </div>
+    </div>
+    <div class="showthis">
+        @if (Model.CanRenew == 2)
+        {
+            <span id="show">该图书已续借，无法续借</span>
+        }
+        else if (Model.CanRenew == 3)
+        {
+            <span id="show">该图书已超期，无法续借</span>
+        }
+    </div>
+</div>

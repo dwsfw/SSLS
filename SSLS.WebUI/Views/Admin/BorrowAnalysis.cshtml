@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "BorrowAnalysis";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="~/Scripts/ECharts/echarts.js"></script>
+<script src="~/Scripts/ECharts/echarts-all.js"></script>
+<div class="layui-container">
+    <h3 class="layui-transfer-header" style="text-align:center">借阅分析</h3>
+    <div id="main" style="margin: 0 auto;width: 600px;height:400px;"></div>
+</div>
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('main'));
+    $(function () {
+        $.post("/Admin/BorrowChartDate", { len: 6 }, function (num) {
+            option = {
+                xAxis: {
+                    title: '月份',
+                    type: 'category',
+                    data: ["@DateTime.Now.AddMonths(-6).Month.ToString()月", '@DateTime.Now.AddMonths(-5).Month.ToString()月',
+                        '@DateTime.Now.AddMonths(-4).Month.ToString()月', '@DateTime.Now.AddMonths(-3).Month.ToString()月',
+                        '@DateTime.Now.AddMonths(-2).Month.ToString()月', '@DateTime.Now.AddMonths(-1).Month.ToString()月',
+                        '@DateTime.Now.Month.ToString()月']
+                },
+                yAxis: {
+                    title:'借阅次数',
+                    type: 'value'
+                },
+                series: [{
+                    data: num,
+                    type: 'line'
+                }],
+                tooltip : {
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+
+            };
+            myChart.setOption(option);
+        })
+    });
+</script>

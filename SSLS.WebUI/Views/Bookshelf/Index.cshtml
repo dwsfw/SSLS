@@ -1,0 +1,75 @@
+﻿@model SSLS.WebUI.Models.BookshelfIndexViewModel
+@{
+    ViewBag.Title = "Bookshelf";
+}
+<style>
+    #cartTable td {
+        vertical-align: middle;
+    }
+    #checkall {
+        position:relative;
+        top:10px
+    }
+    .hid{
+            display:block;
+        }
+</style>
+<script>
+    $(function () {
+        $("#checkall").on("click", function () {
+            $(".checkthis").prop("checked", this.checked);
+        })
+        $(".delete").click(function () {
+            var remove = $(this).parents("tr");
+            $.ajax({
+                type: "get",
+                url: "/Bookshelf/RemoveFromBookshelf",
+                data: {
+                    id: $(this).parents("tr").find(".checkthis").val(),
+                    returnUrl: $(this).parent().find(".url").val()
+                },
+                success: function (result) {
+                    remove.remove();
+                    $(".sum").text($(".sum").text() - 1);
+                }
+            })
+        })
+    })
+</script>
+<h2>书架</h2>
+@using (Html.BeginForm("Borrow", "Bookshelf"))
+{
+<table id="cartTable" class="table">
+    <thead>
+        <tr>
+            <th>全选&nbsp;<input type="checkbox" id="checkall"/></th>
+            <th>书籍</th>
+            <th>作者</th>
+            <th>图片</th>
+            <th>金额</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var c in Model.Bookshelf.Lines)
+        {
+            <tr>
+                <td><input type="checkbox" name="checkon" class="checkthis" value="@c.Book.Id" /></td>
+                <td>@c.Book.Name</td>
+                <td>@c.Book.Authors</td>
+                <td><img src="~/Images/@c.Book.ImageUrl" height="80"/></td>
+                <td>￥@((c.Book.Price * c.Quantity))</td>
+                <td>
+                     <a class="btn btn-warning delete">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="text-center">
+    <a class="btn btn-primary" href="@Model.ReturnUrl">继续选书</a>
+    <input type="text" name="returnUrl" style="display:none" class="url" value="@Request.Url.PathAndQuery" />
+    <input type="submit" value="确认借阅" class="btn btn-primary" />
+</div>
+}

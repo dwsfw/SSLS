@@ -1,0 +1,41 @@
+﻿@model SSLS.Domain.Concrete.Category
+@{
+    ViewBag.Title = "EditCategory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script type="text/javascript" src="~/Scripts/nicEdit.js"></script>
+<script type="text/javascript">
+    bkLib.onDomLoaded(function () { nicEditors.allTextAreas() });
+</script>
+<div class="panel panel-default" style="margin:30px 0 0 40px">
+    <div class="panel-heading"><h2>编辑分类</h2></div>
+    @using (Html.BeginForm("EditCategory", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
+            <div class="form-group">
+                <label class="control-label col-md-2" for="Name">名称</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="Description">描述</label>
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.Description, new { 
+                   htmlAttributes = new { @class = "form-control" },@cols="40",@rows="5" })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-primary btn-fw" />
+                    <a href="/Admin/CategoryIndex" class="btn btn-primary btn-fw">放弃修改</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,95 @@
+﻿@model SSLS.WebUI.Models.ChangePwdViewModel
+@{
+    ViewBag.Title = "ChangePwd";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+<link rel="stylesheet" href="~/assets/bootstrap-v3/css/bootstrap.css">
+<style>
+    .material-icons {
+        font-size: 16px;
+    }
+    table tr .short{
+        width:70px
+    }
+    ul li span {
+        float: left;
+    }
+</style>
+<script>
+    $(function () {
+        for (var i = 0; i < $(".whide").length; i++) {
+            if ($(".whide").eq(i).text() != "")
+                toastr.warning('温馨提示', $(".whide").eq(i).text())
+        }
+    })
+</script>
+<div class="panel">
+    <div class="panel-heading">
+        <h3>密码修改</h3>
+    </div>
+@using (Html.BeginForm())
+{
+    <span class="whide">@Html.ValidationMessageFor(e => e.OldPwd)</span>
+    <span class="whide">@Html.ValidationMessage("pwderror")</span>
+    <span class="whide">@Html.ValidationMessageFor(e => e.NewPwd)</span>
+    <span class="whide">@Html.ValidationMessageFor(e=>e.NewPwdAgain)</span>
+            <div style="width: 300px; margin: 50px auto;">
+                <p>
+                    <input data-toggle="password"
+                           data-placement="after"
+                           class="form-control"
+                           type="password"
+                           name="OldPwd"
+                           placeholder="旧密码"
+                           data-eye-class="material-icons"
+                           data-eye-open-class="visibility"
+                           data-eye-close-class="visibility_off"
+                           data-eye-class-position-inside="true"
+                           data-message="点击隐藏或显示密码">
+                </p>
+                <p>
+                    <input data-toggle="password"
+                           data-placement="after"
+                           class="form-control"
+                           type="password"
+                           name="NewPwd"
+                           placeholder="新密码"
+                           data-eye-class="material-icons"
+                           data-eye-open-class="visibility"
+                           data-eye-close-class="visibility_off"
+                           data-eye-class-position-inside="true"
+                           data-message="点击隐藏或显示密码">
+                </p>
+                <p>
+                    <input data-toggle="password"
+                           data-placement="after"
+                           class="form-control"
+                           type="password"
+                           name="NewPwdAgain"
+                           placeholder="确认密码"
+                           data-eye-class="material-icons"
+                           data-eye-open-class="visibility"
+                           data-eye-close-class="visibility_off"
+                           data-eye-class-position-inside="true"
+                           data-message="点击隐藏或显示密码">
+                </p>
+                <input type="submit" value="确认修改" class="btn btn-primary" />
+                <a href="/Reader/Center" class="btn btn-primary">放弃修改</a>
+            </div>
+        }
+ 
+</div>
+<script src="~/js/bootstrap-show-password.js"></script>
+<script src="~/assets/jquery.min.js"></script>
+<script src="~/assets/bootstrap-v3/js/bootstrap.js"></script>
+<script>
+    $('[data-attr="show-password"]').password({
+        placement: 'before',
+        eyeClass: 'material-icons',
+        eyeOpenClass: 'visibility',
+        eyeCloseClass: 'visibility_off',
+        eyeClassPositionInside: true,
+        message: '点击隐藏或显示密码'
+    })
+</script>

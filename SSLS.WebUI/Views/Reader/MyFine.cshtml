@@ -1,0 +1,115 @@
+﻿@model IEnumerable<SSLS.Domain.Concrete.Fine>
+@{
+    ViewBag.Title = "MyFine";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .lose {
+        pointer-events: none;
+        background: #cbcbcb;
+        color: black;
+    }
+    .radio{
+       position:relative;
+       top:10px
+    }
+    label{
+        cursor:pointer;
+    }
+    table tr th,td{
+        text-align:center;
+    }
+    table{
+        width:100%;
+    }
+</style>
+<script>
+    $(function () {
+        for (var i = 0; i < $(".PayFineTime").length; i++) {
+            if ($(".PayFineTime").eq(i).text().trim() == "") {
+                $(".PayFineTime").eq(i).parents("tr").show();
+            }
+            else {
+                $(".PayFineTime").eq(i).parents("tr").hide();
+            }
+        }
+        $(".AllFine").click(function () {
+            for (var i = 0; i < $(".PayFineTime").length; i++) {
+               $(".PayFineTime").eq(i).parents("tr").show();
+            }
+        })
+        $(".Payed").click(function () {
+            for (var i = 0; i < $(".PayFineTime").length; i++) {
+                if ($(".PayFineTime").eq(i).text().trim() != "") {
+                    $(".PayFineTime").eq(i).parents("tr").show();
+                }
+                else {
+                    $(".PayFineTime").eq(i).parents("tr").hide();
+                }
+            }
+        })
+        $(".Nopay").click(function () {
+            for (var i = 0; i < $(".PayFineTime").length; i++) {
+                if ($(".PayFineTime").eq(i).text().trim() == "") {
+                    $(".PayFineTime").eq(i).parents("tr").show();
+                }
+                else {
+                    $(".PayFineTime").eq(i).parents("tr").hide();
+                }
+            }
+        })
+    })
+</script>
+<div class="radio-inline">
+    <label class="AllFine">
+        <input type="radio" name="radio" value="已缴纳" class="radio"  />所有罚款
+    </label>
+</div>
+<div class="radio-inline">
+    <label class="Payed">
+        <input type="radio" name="radio" value="已缴纳" class="radio"/>已缴纳
+    </label>
+</div>
+<div class="radio-inline">
+    <label class="Nopay">
+        <input type="radio" name="radio" value="未缴纳" class="radio" checked="checked" />未缴纳
+    </label>
+</div>
+<table class="table">
+    <tr>
+        <th>书籍名</th>
+        <th>罚款时间</th>
+        <th>罚款原因</th>
+        <th>罚款金额</th>
+        <th>罚款缴纳时间</th>
+        <th>操作</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>@Html.DisplayFor(modelItem => item.Borrow.Book.Name)</td>
+        <td>@item.FineTime.ToShortDateString()</td>
+        <td>@Html.DisplayFor(modelItem => item.why)</td>
+        <td>@Html.DisplayFor(modelItem => item.FineMoney)</td>
+        <td class="PayFineTime">
+            @if (item.PayFineTime != null)
+            {
+                @DateTime.Parse(Html.DisplayFor(modelItem => item.PayFineTime).ToString()).ToShortDateString()
+
+            }
+        </td>
+        <td>
+            @Html.ActionLink("罚款详情", "FineDetails", new { id = item.Id, returnUrl =  Request.Url.PathAndQuery },
+            new { @class = "btn btn-success" }) 
+            @if (item.PayFineTime == null)
+            {
+                @Html.ActionLink("缴纳罚款", "PayFine", new { id = item.Id }, new { @class = "btn btn-success" })
+            }
+            else
+            {
+                @Html.ActionLink("缴纳罚款", "PayFine", new { id = item.Id }, new { @class = "btn btn-success lose" })
+            }
+        </td>
+    </tr>
+}
+</table>
